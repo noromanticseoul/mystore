@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>외부 데이터 수집 정리</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+:root{--ink:#1D1D1F;--sub:#6E6E73;--foot:#86868B;--blue:#0071E3;--blue2:#2997FF;--card:#F5F5F7;--dark:#1C1C1E;--line:#E5E5EA;--ok:#0071E3;--warn:#B26B00;--no:#86868B}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{word-break:keep-all;background:#D2D2D7;font-family:Pretendard,-apple-system,"Apple SD Gothic Neo",sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}
+.deck{display:flex;flex-direction:column;align-items:center;gap:24px;padding:24px 16px}
+.slide{width:1280px;height:720px;background:#fff;position:relative;overflow:hidden;padding:56px 72px 64px;transform-origin:top left;flex:none}
+.wrap{width:1280px;height:720px;flex:none}
+.slide.black{background:#000;color:#fff}
+.kicker{font-weight:600;font-size:17px;color:var(--blue);margin-bottom:12px}
+.black .kicker{color:var(--blue2)}
+h1{font-weight:700;font-size:44px;letter-spacing:-0.03em;line-height:1.18}
+h1.cover{font-size:72px;letter-spacing:-0.03em;line-height:1.1}
+.lead{font-size:22px;letter-spacing:-0.014em;color:var(--sub);margin-top:20px;line-height:1.45}
+.black .lead{color:#A1A1A6}
+.foot{position:absolute;left:72px;right:72px;bottom:28px;display:flex;justify-content:space-between;font-size:12px;color:var(--foot)}
+.grid{display:grid;gap:16px;margin-top:32px}
+.g3{grid-template-columns:repeat(3,1fr)}.g2{grid-template-columns:1fr 1fr}.g4{grid-template-columns:repeat(4,1fr)}
+.card{background:var(--card);border-radius:18px;padding:22px 24px}
+.card .lab{font-weight:600;font-size:14px;color:var(--blue);margin-bottom:8px}
+.card .big{font-weight:700;font-size:22px;letter-spacing:-0.025em;line-height:1.3}
+.card .num{font-weight:700;font-size:38px;letter-spacing:-0.03em}
+.card p{font-size:14px;color:var(--sub);line-height:1.55;margin-top:8px}
+table{width:100%;border-collapse:collapse;margin-top:26px;font-size:14px}
+th{font-weight:600;color:var(--sub);text-align:left;padding:9px 10px;border-bottom:1.5px solid var(--ink);font-size:13px}
+td{padding:9px 10px;border-bottom:1px solid var(--line);line-height:1.4;vertical-align:top}
+td.r,th.r{text-align:right;font-variant-numeric:tabular-nums}
+td b{font-weight:600}
+.tag{display:inline-block;font-size:12px;font-weight:600;padding:3px 9px;border-radius:999px;white-space:nowrap}
+.t-ok{background:#E8F2FD;color:var(--ok)}.t-part{background:#FFF4E0;color:var(--warn)}.t-snap{background:#EEEEF0;color:#3A3A3C}.t-no{background:#F2F2F2;color:var(--no)}
+.hl{background:#E8F2FD}
+.flow{display:flex;align-items:stretch;gap:12px;margin-top:34px}
+.flow .card{flex:1}
+.arrow{align-self:center;color:var(--foot);font-size:22px}
+.note{font-size:13px;color:var(--sub);margin-top:16px;line-height:1.55}
+.bar{height:8px;background:#E5E5EA;border-radius:4px;overflow:hidden;margin-top:6px}
+.bar i{display:block;height:100%;background:var(--blue)}
+ul.clean{list-style:none;margin-top:6px}
+ul.clean li{font-size:14px;color:var(--sub);line-height:1.6;padding-left:12px;position:relative}
+ul.clean li:before{content:"";position:absolute;left:0;top:10px;width:4px;height:4px;border-radius:2px;background:var(--foot)}
+@media print{html,body{background:#fff}.deck{padding:0;gap:0}.wrap{transform:none!important;width:1280px!important;height:720px!important}.slide{transform:none!important;page-break-after:always}@page{size:1280px 720px;margin:0}}
+</style>
+</head>
+<body>
+<div class="deck" id="deck">
+
+<!-- 1 -->
+<div class="wrap"><section class="slide black">
+  <div class="kicker" style="margin-top:110px">머신러닝 기말 프로젝트 · 데이터 확보 단계</div>
+  <h1 class="cover">공공 데이터 밖의 신호를<br>상권 단위로 모으다</h1>
+  <div class="lead" style="margin-top:28px">의류 창업 입지 예측 모델(v5)을 위한 외부 데이터 수집 정리<br>검색 관심도 · 대중교통 유동 · 날씨 · 현재 점포 현황</div>
+  <div class="foot" style="color:#86868B"><span>박하민 · 21900325</span><span>2026. 11. 19</span></div>
+</section></div>
+
+<!-- 2 -->
+<div class="wrap"><section class="slide">
+  <div class="kicker">수집 배경</div>
+  <h1>서울시 상권 데이터가 보여주지 않는 것을<br>외부 API로 보완한다</h1>
+  <div class="grid g3">
+    <div class="card"><div class="lab">빈칸 1 · 관심도</div><div class="big">사람들이 그 동네를<br>찾아보고 있는가</div><p>매출은 결과 지표. 검색량·문서 조회수는 방문 이전 단계의 선행 신호 후보.</p></div>
+    <div class="card"><div class="lab">빈칸 2 · 실제 유동</div><div class="big">역·정류장에서<br>실제로 몇 명이 내리는가</div><p>v5에는 지하철역 '개수'만 존재. 승하차 인원은 미반영 상태.</p></div>
+    <div class="card"><div class="lab">빈칸 3 · 현재 경쟁</div><div class="big">지금 반경 안에<br>카페·옷가게가 몇 곳인가</div><p>공공 점포 데이터는 분기 지연. 지도 API로 최신 점포 수 확인.</p></div>
+  </div>
+  <div class="card" style="margin-top:16px;background:#fff;border:1px solid var(--line)"><div class="lab">수집 원칙</div>
+    <p style="margin-top:0;color:var(--ink);font-size:15px">① API로 반복 수집 가능할 것 &nbsp;·&nbsp; ② (분기, 상권코드)로 결합 가능할 것 &nbsp;·&nbsp; ③ 분기 t 행에는 t까지의 정보만 사용(미래 정보 누수 금지) &nbsp;·&nbsp; ④ 의류와 카페를 같은 상권·같은 분기로 함께 수집</p></div>
+  <div class="foot"><span>박하민 · 21900325</span><span>2 / 9</span></div>
+</section></div>
+
+<!-- 3 -->
+<div class="wrap"><section class="slide">
+  <div class="kicker">수집 대상 목록</div>
+  <h1>검토한 외부 소스 9개 중 7개 수집,<br>2개는 사유 명시 후 제외</h1>
+  <table>
+    <tr><th>소스</th><th>제공처 · 방식</th><th>무엇을 보는가</th><th>키</th><th>상태</th></tr>
+    <tr><td><b>구글 트렌드</b></td><td>Google · pytrends(비공식)</td><td>동네·업종 검색 관심도 (의류·카페 키워드)</td><td>불필요</td><td><span class="tag t-part">부분 · 계속 수집 중</span></td></tr>
+    <tr><td><b>위키백과 조회수</b></td><td>Wikimedia REST</td><td>동네·상권 문서 월별 조회수</td><td>불필요</td><td><span class="tag t-ok">완료</span></td></tr>
+    <tr><td><b>날씨</b></td><td>Open-Meteo 과거 관측</td><td>분기 평균기온, 강수일, 폭염일, 한파일</td><td>불필요</td><td><span class="tag t-ok">완료</span></td></tr>
+    <tr><td><b>지하철 승하차</b></td><td>서울 열린데이터광장 OpenAPI</td><td>역별 월 승하차 → 상권 반경 500m 합계</td><td>서울시 키</td><td><span class="tag t-ok">완료</span></td></tr>
+    <tr><td><b>버스 승하차</b></td><td>서울 열린데이터광장 OpenAPI</td><td>정류장별 월 승하차 → 반경 300m 합계</td><td>서울시 키</td><td><span class="tag t-ok">완료</span></td></tr>
+    <tr><td><b>카카오 로컬</b></td><td>Kakao Developers</td><td>반경 300·500m 카페·의류 점포 수</td><td>REST 키</td><td><span class="tag t-snap">완료 · 현재 시점</span></td></tr>
+    <tr><td><b>소상공인 상가정보</b></td><td>공공데이터포털</td><td>반경 500m 카페·의류 업소 수</td><td>인증키</td><td><span class="tag t-snap">완료 · 현재 시점</span></td></tr>
+    <tr><td><b>네이버 데이터랩·검색</b></td><td>Naver Developers</td><td>검색어 트렌드, 쇼핑인사이트, 블로그 수</td><td>Client ID</td><td><span class="tag t-no">보류 · 신규 등록 불가</span></td></tr>
+    <tr><td><b>인스타그램 해시태그</b></td><td>Instagram Graph API</td><td>해시태그 게시물 수</td><td>심사 필요</td><td><span class="tag t-no">제외 · 공개 API 없음</span></td></tr>
+  </table>
+  <div class="foot"><span>박하민 · 21900325</span><span>3 / 9</span></div>
+</section></div>
+
+<!-- 4 -->
+<div class="wrap"><section class="slide">
+  <div class="kicker">소스별 수집 결과</div>
+  <h1>원자료 130만 행 이상,<br>상권 × 분기 피처 73개로 정리</h1>
+  <table>
+    <tr><th>소스</th><th>기간 · 단위</th><th class="r">원자료 행</th><th class="r">피처</th><th style="width:230px">커버리지 (2021Q1~2026Q1)</th></tr>
+    <tr><td><b>구글 트렌드</b></td><td>2019-01 ~ 2026-10 · 월</td><td class="r">6,840</td><td class="r">42</td><td>0.74 <div class="bar"><i style="width:74%"></i></div></td></tr>
+    <tr><td><b>위키백과 조회수</b></td><td>2019-01 ~ 2026-10 · 월 · 문서 378개</td><td class="r">33,689</td><td class="r">4</td><td>0.55 <div class="bar"><i style="width:55%"></i></div></td></tr>
+    <tr><td><b>날씨 (서울)</b></td><td>2019-01-01 ~ · 일</td><td class="r">2,877</td><td class="r">7</td><td>1.00 · 분기 공통 <div class="bar"><i style="width:100%"></i></div></td></tr>
+    <tr><td><b>지하철 승하차</b></td><td>2019-01 ~ 2026-10 · 역×호선×월</td><td class="r">58,749</td><td class="r">7</td><td>0.88 <div class="bar"><i style="width:88%"></i></div></td></tr>
+    <tr><td><b>버스 승하차</b></td><td>2019-01 ~ 2026-10 · 정류장×월</td><td class="r">1,192,563</td><td class="r">4</td><td>1.00 <div class="bar"><i style="width:100%"></i></div></td></tr>
+    <tr><td><b>카카오 점포 수</b></td><td>수집일 기준 스냅샷</td><td class="r">9,744</td><td class="r">6</td><td>전 상권 · 최신 예측 전용</td></tr>
+    <tr><td><b>소상공인 상가정보</b></td><td>2026-09 기준 스냅샷</td><td class="r">1,624</td><td class="r">3</td><td>전 상권 · 최신 예측 전용</td></tr>
+  </table>
+  <div class="note">커버리지 = 모델 학습 범위 상권×분기 중 값이 존재하는 비율(컬럼 평균). 구글 트렌드는 전체 140개 키워드 묶음 중 19개 기준이며, 수집 완료 후 동네별 검색 피처 커버리지 상승 예정.</div>
+  <div class="foot"><span>박하민 · 21900325</span><span>4 / 9</span></div>
+</section></div>
+
+<!-- 5 -->
+<div class="wrap"><section class="slide">
+  <div class="kicker">결합 방법</div>
+  <h1>모든 외부 데이터를 (분기, 상권코드)<br>하나의 키로 정렬</h1>
+  <div class="flow">
+    <div class="card"><div class="lab">1 · 위치 매칭</div><div class="big">상권 중심점 기준 반경</div><p>지하철 500m, 버스 300m, 카카오 300·500m. 검색·위키는 동·상권명 정규화 후 상권코드에 연결.</p></div>
+    <div class="arrow">→</div>
+    <div class="card"><div class="lab">2 · 기간 집계</div><div class="big">월·일 자료를 분기로</div><p>분기 합계·평균과 전년 동기 대비 증가율(t vs t−4). 끝나지 않은 분기는 제외.</p></div>
+    <div class="arrow">→</div>
+    <div class="card"><div class="lab">3 · 시점 정렬</div><div class="big">직전 분기 값으로 결합</div><p>t+1 분기 예측에는 t 분기까지의 값만 사용. v5 파생 변수와 동일 규칙.</p></div>
+    <div class="arrow">→</div>
+    <div class="card"><div class="lab">4 · 스냅샷 분리</div><div class="big">현재 시점 값은 별도</div><p>카카오·상가정보 점포 수는 과거 학습에 넣으면 누수. 최신 분기 예측 전용 파일로 분리.</p></div>
+  </div>
+  <div class="grid g3" style="margin-top:20px">
+    <div class="card" style="background:#fff;border:1px solid var(--line)"><div class="lab">결합 후 행 수 (v5 패널)</div><div class="num">30,540 → 30,540</div><p>left join 후 행 수 변화 없음</p></div>
+    <div class="card" style="background:#fff;border:1px solid var(--line)"><div class="lab">카페+의류 마스터</div><div class="num">59,933 → 59,933</div><p>두 업종 모두 동일 키로 결합</p></div>
+    <div class="card" style="background:#fff;border:1px solid var(--line)"><div class="lab">외부 값이 붙은 행</div><div class="num">99.6%</div><p>카페 99.59%, 의류 99.58% (지하철 최근접 기준)</p></div>
+  </div>
+  <div class="foot"><span>박하민 · 21900325</span><span>5 / 9</span></div>
+</section></div>
+
+<!-- 6 -->
+<div class="wrap"><section class="slide">
+  <div class="kicker">의류 × 카페</div>
+  <h1>의류와 카페를 같은 상권, 같은 분기로<br>함께 수집</h1>
+  <div class="grid g2">
+    <div class="card"><div class="lab">대상 범위</div><div class="num">1,624개 상권</div><p>의류 패널 1,543개 + 카페만 존재하는 81개<br>2019Q1 ~ 2026Q3, 총 50,344 상권×분기 행</p></div>
+    <div class="card"><div class="lab">항목 사전 (feature_dictionary.csv)</div><div class="big">컬럼마다 출처 · 요인 그룹 ·<br>업종(의류/카페/공통) · 누수 여부</div><p>다음 단계에서 요인 그룹 단위로 비중을 학습할 수 있도록 접두어 통일 (ext_search_, ext_subway_, ext_bus_, ext_weather_ 등)</p></div>
+  </div>
+  <table style="margin-top:20px">
+    <tr><th>구분</th><th>의류 쪽 수집</th><th>카페 쪽 수집</th></tr>
+    <tr><td><b>검색 관심도</b></td><td>옷가게 · 빈티지샵 · 편집샵 · 팝업스토어, "동네 + 옷가게"</td><td>카페 · 디저트카페 · 카페거리 · 브런치카페, "동네 + 카페"</td></tr>
+    <tr><td><b>현재 점포 수</b></td><td>카카오 '옷가게'·'의류', 상가정보 의류 업종</td><td>카카오 카페 카테고리, 상가정보 카페 업종</td></tr>
+    <tr><td><b>공통</b></td><td colspan="2">지하철·버스 승하차, 날씨, 위키 조회수 (상권 단위 동일 값)</td></tr>
+  </table>
+  <div class="foot"><span>박하민 · 21900325</span><span>6 / 9</span></div>
+</section></div>
+
+<!-- 7 -->
+<div class="wrap"><section class="slide">
+  <div class="kicker">1차 효과 확인 · 13개 분기 롤링 백테스트</div>
+  <h1>외부 데이터 단독 추가 효과는 작음.<br>날씨만 AUC 기준 통계적 유의</h1>
+  <table>
+    <tr><th>모델 (v5 + 추가 그룹)</th><th class="r">추가 피처</th><th class="r">AUC</th><th class="r">v5 대비</th><th class="r">p 값</th><th class="r">Top 10 적중</th></tr>
+    <tr><td>v5 (기존)</td><td class="r">0</td><td class="r">0.643</td><td class="r">-</td><td class="r">-</td><td class="r">8.00</td></tr>
+    <tr><td>+ 유동 (지하철·버스)</td><td class="r">11</td><td class="r">0.639</td><td class="r">−0.004</td><td class="r">0.147</td><td class="r">8.15</td></tr>
+    <tr><td>+ 검색 (구글 공통 + 위키)</td><td class="r">32</td><td class="r">0.648</td><td class="r">+0.005</td><td class="r">0.244</td><td class="r">8.00</td></tr>
+    <tr class="hl"><td><b>+ 날씨</b></td><td class="r">7</td><td class="r"><b>0.651</b></td><td class="r"><b>+0.008</b></td><td class="r"><b>0.048</b></td><td class="r">7.85</td></tr>
+    <tr><td>+ 전체</td><td class="r">50</td><td class="r">0.649</td><td class="r">+0.005</td><td class="r">0.147</td><td class="r">7.46</td></tr>
+    <tr><td>v5 블렌드 (현재 서비스 기준)</td><td class="r">0</td><td class="r">0.661</td><td class="r">-</td><td class="r">-</td><td class="r">8.23</td></tr>
+    <tr><td>+ 전체 블렌드</td><td class="r">50</td><td class="r">0.663</td><td class="r">+0.002</td><td class="r">0.340</td><td class="r">8.15</td></tr>
+  </table>
+  <div class="note">날씨 추가 시 13개 분기 중 9개 분기에서 AUC 향상(Wilcoxon p = 0.048). Top 10 적중과 블렌드 기준 차이는 유의하지 않음. 날씨·업종 검색은 같은 분기 모든 상권에 같은 값이므로 분기 간 보정 효과에 한정.</div>
+  <div class="foot"><span>박하민 · 21900325</span><span>7 / 9</span></div>
+</section></div>
+
+<!-- 8 -->
+<div class="wrap"><section class="slide">
+  <div class="kicker">한계와 미수집 사유</div>
+  <h1>수집하지 못한 것과<br>해석에 주의할 점</h1>
+  <div class="grid g2">
+    <div class="card"><div class="lab">미수집</div>
+      <ul class="clean">
+        <li><b style="color:var(--ink)">네이버 데이터랩·검색</b>: 개발자센터에서 해당 API 신규 등록 불가로 키 발급 실패. 수집 스크립트는 준비 완료</li>
+        <li><b style="color:var(--ink)">인스타그램 해시태그</b>: 공개 API 없음. 비즈니스 계정·앱 심사 필요, 기간별 게시물 수 미제공. 크롤링은 약관 위반으로 배제</li>
+      </ul></div>
+    <div class="card"><div class="lab">해석 주의</div>
+      <ul class="clean">
+        <li>구글 트렌드는 비공식 API로 요청 제한(429)이 심해 수집 진행 중. 검색량이 작은 동은 0으로 반올림</li>
+        <li>동 키워드는 행정동 단위라 같은 동 안 여러 상권이 같은 값</li>
+        <li>위키 조회수는 관심도 대리 지표로, 소비와의 직접 관계는 약함</li>
+        <li>반경 매칭은 중심점 기준이라 관광특구 등 큰 상권은 영역 일부만 반영</li>
+        <li>카카오·상가정보 점포 수는 현재 시점 값으로, 과거 학습에 사용 불가</li>
+      </ul></div>
+  </div>
+  <div class="foot"><span>박하민 · 21900325</span><span>8 / 9</span></div>
+</section></div>
+
+<!-- 9 -->
+<div class="wrap"><section class="slide black">
+  <div class="kicker" style="margin-top:60px">다음 단계</div>
+  <h1 style="font-size:48px">수집한 데이터로 요인별 비중을 학습하고,<br>실무자가 쓰는 화면까지</h1>
+  <div class="grid g4" style="margin-top:48px">
+    <div class="card" style="background:var(--dark)"><div class="lab" style="color:var(--blue2)">1</div><div class="big" style="color:#fff">요인 비중 학습</div><p style="color:#A1A1A6">요인 그룹별 최적 비중을 롤링 검증으로 학습, 의류-카페 관계 재검증</p></div>
+    <div class="card" style="background:var(--dark)"><div class="lab" style="color:var(--blue2)">2</div><div class="big" style="color:#fff">PRD v1 → v2</div><p style="color:#A1A1A6">패션 실무자 관점 피드백 반영</p></div>
+    <div class="card" style="background:var(--dark)"><div class="lab" style="color:var(--blue2)">3</div><div class="big" style="color:#fff">실무자 서비스</div><p style="color:#A1A1A6">요인 비중을 직접 조정해 2026년 3분기 전망 확인</p></div>
+    <div class="card" style="background:var(--dark)"><div class="lab" style="color:var(--blue2)">4</div><div class="big" style="color:#fff">트렌드 보강</div><p style="color:#A1A1A6">구글 트렌드 수집 완료 후 재결합·수치 갱신</p></div>
+  </div>
+  <div class="foot"><span>박하민 · 21900325</span><span>9 / 9</span></div>
+</section></div>
+
+</div>
+<script>
+function fit(){var w=Math.min(window.innerWidth-32,1280),s=w/1280;document.querySelectorAll('.wrap').forEach(function(el){el.style.width=w+'px';el.style.height=(720*s)+'px';el.firstElementChild.style.transform='scale('+s+')';});}
+window.addEventListener('resize',fit);fit();
+</script>
+</body>
+</html>
